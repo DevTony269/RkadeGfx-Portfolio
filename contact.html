@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | RkadeGfx</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Smooth animations matching About page */
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .float-in {
+            animation: floatUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .delay-4 {
+            animation-delay: 0.4s;
+        }
+
+        .delay-5 {
+            animation-delay: 0.5s;
+        }
+
+        /* Gradient backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(236, 72, 153, 0.05) 100%);
+            border-radius: var(--radius);
+            padding: 32px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .gradient-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.6));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .gradient-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Contact icons */
+        .contact-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-size: 1.5rem;
+        }
+
+        /* Form enhancements */
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+            border-color: var(--primary);
+        }
+
+        /* Success message */
+        .success-message {
+            animation: floatUp 0.6s ease-out;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(21, 128, 61, 0.05));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        /* Content reveal */
+        .content-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+
+        .content-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hover effects */
+        .hover-lift {
+            transition: var(--transition);
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Floating animation */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Glow effect */
+        .glow {
+            position: relative;
+        }
+
+        .glow::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            border-radius: calc(var(--radius) + 2px);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            filter: blur(5px);
+        }
+
+        .glow:hover::after {
+            opacity: 0.3;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .gradient-bg {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">RkadeGfx</a>
+
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a href="commissions.html">Commissions</a></li>
+                <!-- <li><a href="testimonials.html">Testimonials</a></li> -->
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" style="padding-top: 140px; padding-bottom: 80px;">
+        <div class="container">
+            <div class="float-in">
+                <h1 class="section-title" style="margin-bottom: 20px;">Get In <span
+                        style="background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Touch</span>
+                </h1>
+                <p class="section-subtitle" style="margin-bottom: 0;">
+                    Contact me directly or fill out the form below.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Grid -->
+    <section style="padding: 50px 0 50px;">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="content-reveal float-in">
+                    <div class="gradient-bg glow hover-lift">
+                        <h2
+                            style="font-size: 2.2rem; margin-bottom: 30px; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                            Send a Message
+                        </h2>
+
+                        <div id="form-submitted" style="display: none;">
+                            <div class="success-message"
+                                style="border-radius: var(--radius); padding: 32px; text-align: center;">
+                                <div
+                                    style="width: 80px; height: 80px; background: linear-gradient(135deg, #22c55e, #16a34a); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2rem;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <h4 style="color: #22c55e; margin-bottom: 10px; font-size: 1.5rem;">Message Sent
+                                    Successfully!</h4>
+                                <p style="color: var(--gray);">I'll get back to you as soon as possible.</p>
+                            </div>
+                        </div>
+
+                        <form id="contact-form">
+                            <div class="form-group float-in delay-1">
+                                <label for="name" style="padding-top: 20px;">Your Name *</label>
+                                <input type="text" id="name" name="name" required placeholder="Enter your name"
+                                    style="background: rgba(15, 23, 42, 0.5);">
+                                <div class="error"
+                                    style="color: #ef4444; font-size: 0.875rem; margin-top: 5px; display: none;"></div>
+                            </div>
+
+                            <div class="form-group float-in delay-2">
+                                <label for="contact" style="padding-top: 10px;">Contact (Discord/Twitter/Email)
+                                    *</label>
+                                <input type="text" id="contact" name="contact" required
+                                    placeholder="username#0000 or @handle or email@example.com"
+                                    style="background: rgba(15, 23, 42, 0.5);">
+                                <div class="error"
+                                    style="color: #ef4444; font-size: 0.875rem; margin-top: 5px; display: none;"></div>
+                            </div>
+
+                            <div class="form-group float-in delay-3">
+                                <label for="project-type" style="padding-top: 10px;">Project Type *</label>
+                                <select id="project-type" name="project-type" required
+                                    style="background: rgba(15, 23, 42, 0.5);">
+                                    <option value="">Select a type...</option>
+                                    <option value="thumbnail">Thumbnail Design</option>
+                                    <option value="logo">Logo Design</option>
+                                    <option value="pfp">Profile Picture</option>
+                                    <option value="gfx">GFX Art</option>
+                                    <option value="bundle">Multiple Services</option>
+                                    <option value="other">Other/Custom</option>
+                                </select>
+                                <div class="error"
+                                    style="color: #ef4444; font-size: 0.875rem; margin-top: 5px; display: none;"></div>
+                            </div>
+
+                            <div class="form-group float-in delay-4" style="padding-bottom: 25px;">
+                                <label for="message" style="padding-top: 10px;">Project Details *</label>
+                                <textarea id="message" name="message" rows="7" required
+                                    placeholder="Describe your project, include references, specific requirements, and any deadlines..."
+                                    style="background: rgba(15, 23, 42, 0.5); resize: vertical;"></textarea>
+                                <div class="error"
+                                    style="color: #ef4444; font-size: 0.875rem; margin-top: 5px; display: none;"></div>
+                            </div>
+
+                            <button type="submit" class="btn float-in delay-5"
+                                style="width: 100%; background: linear-gradient(to right, var(--primary), var(--secondary)); margin-top: 10px;">
+                                <i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="content-reveal float-in delay-1">
+                    <h2
+                        style="font-size: 2.2rem; margin-bottom: 30px; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        Direct Contact
+                    </h2>
+
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <!-- Discord -->
+                        <div class="gradient-card glow hover-lift">
+                            <div class="contact-icon" style="background: linear-gradient(135deg, #5865F2, #7289DA);">
+                                <i class="fab fa-discord"></i>
+                            </div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 8px;">Discord</h3>
+                            <p style="color: var(--primary); font-size: 1.2rem; font-weight: 600; margin-bottom: 5px;">
+                                tony7967</p>
+                            <p style="color: var(--gray); font-size: 0.9rem;">
+                                <i class="fas fa-bolt" style="color: var(--primary); margin-right: 5px;"></i>
+                                <strong>Best way to reach me</strong> - Fastest response time
+                            </p>
+                            <a href="https://discord.com/users/tony7967" target="_blank"
+                                style="color: var(--primary); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-top: 10px;">
+                                <i class="fas fa-external-link-alt" style="margin-right: 5px;"></i> Send Message
+                            </a>
+                        </div>
+
+                        <!-- Twitter/X -->
+                        <div class="gradient-card glow hover-lift">
+                            <div class="contact-icon" style="background: linear-gradient(135deg, #1DA1F2, #0c7abf);">
+                                <i class="fab fa-twitter"></i>
+                            </div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 8px;">Twitter/X</h3>
+                            <p style="color: var(--primary); font-size: 1.2rem; font-weight: 600; margin-bottom: 5px;">
+                                @RkadeGfx</p>
+                            <p style="color: var(--gray); font-size: 0.9rem;">
+                                <i class="fas fa-hashtag" style="color: var(--primary); margin-right: 5px;"></i>
+                                Follow for updates and portfolio previews
+                            </p>
+                            <a href="https://twitter.com/RkadeGfx" target="_blank"
+                                style="color: var(--primary); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-top: 10px;">
+                                <i class="fas fa-external-link-alt" style="margin-right: 5px;"></i> Visit Profile
+                            </a>
+                        </div>
+
+                        <!-- YouTube -->
+                        <div class="gradient-card glow hover-lift">
+                            <div class="contact-icon" style="background: linear-gradient(135deg, #FF0000, #cc0000);">
+                                <i class="fab fa-youtube"></i>
+                            </div>
+                            <h3 style="font-size: 1.3rem; margin-bottom: 8px;">YouTube</h3>
+                            <p style="color: var(--primary); font-size: 1.2rem; font-weight: 600; margin-bottom: 5px;">
+                                RkadeTechGfx</p>
+                            <p style="color: var(--gray); font-size: 0.9rem;">
+                                <i class="fas fa-video" style="color: var(--primary); margin-right: 5px;"></i>
+                                Portfolio showcases
+                            </p>
+                            <a href="https://www.youtube.com/@RkadeTechGfx" target="_blank"
+                                style="color: var(--primary); text-decoration: none; font-size: 0.9rem; display: inline-block; margin-top: 10px;">
+                                <i class="fas fa-external-link-alt" style="margin-right: 5px;"></i> Visit Channel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section style="padding: 80px 0; background: rgba(30, 41, 59, 0.3);">
+        <div class="container">
+            <h2 class="section-title float-in">How It Works</h2>
+            <p class="section-subtitle float-in delay-1">Simple 4-step process from start to finish</p>
+
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-top: 60px;">
+                <div class="float-in delay-1">
+                    <div class="gradient-card glow hover-lift" style="text-align: center; padding: 32px;">
+                        <div
+                            style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
+                            1
+                        </div>
+                        <h4 style="font-size: 1.3rem; margin-bottom: 10px;">Contact</h4>
+                        <p style="color: var(--gray); font-size: 0.87rem;">Reach out via form/direct contact</p>
+                    </div>
+                </div>
+
+                <div class="float-in delay-2">
+                    <div class="gradient-card glow hover-lift" style="text-align: center; padding: 32px;">
+                        <div
+                            style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--secondary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
+                            2
+                        </div>
+                        <h4 style="font-size: 1.3rem; margin-bottom: 10px;">Consultation</h4>
+                        <p style="color: var(--gray); font-size: 0.95rem;">We discuss your project details</p>
+                    </div>
+                </div>
+
+                <div class="float-in delay-3">
+                    <div class="gradient-card glow hover-lift" style="text-align: center; padding: 32px;">
+                        <div
+                            style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--accent), var(--primary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
+                            3
+                        </div>
+                        <h4 style="font-size: 1.3rem; margin-bottom: 10px;">Creation</h4>
+                        <p style="color: var(--gray); font-size: 0.95rem;">I bring your vision to life</p>
+                    </div>
+                </div>
+
+                <div class="float-in delay-4">
+                    <div class="gradient-card glow hover-lift" style="text-align: center; padding: 32px;">
+                        <div
+                            style="width: 60px; height: 60px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; margin: 0 auto 20px;">
+                            4
+                        </div>
+                        <h4 style="font-size: 1.3rem; margin-bottom: 10px;">Delivery</h4>
+                        <p style="color: var(--gray); font-size: 0.8rem;">Receive your high-quality artwork</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section style="padding: 80px 0;">
+        <div class="container">
+            <h2 class="section-title float-in">Frequently Asked Questions</h2>
+
+            <div style="max-width: 800px; margin: 60px auto 0;">
+                <div class="gradient-bg glow float-in delay-1">
+                    <div style="display: grid; gap: 20px;">
+                        <div>
+                            <h4
+                                style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-question-circle"></i>
+                                How long does a project take?
+                            </h4>
+                            <p style="color: var(--gray); padding-left: 34px;">
+                                Usually within 3 to 5 days. Rush delivery is available for
+                                a 25% additional fee.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4
+                                style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-question-circle"></i>
+                                What payment methods do you accept?
+                            </h4>
+                            <p style="color: var(--gray); padding-left: 34px;">
+                                PayPal, Robux, or other agreed methods.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4
+                                style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-question-circle"></i>
+                                Do you offer revisions?
+                            </h4>
+                            <p style="color: var(--gray); padding-left: 34px;">
+                                Yes! Logos includes 3 revisions, GFX/Profile Pictures includes 3, and Thumbnails
+                                includes
+                                unlimited revisions.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4
+                                style="color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas fa-question-circle"></i>
+                                Can I see previews before final payment?
+                            </h4>
+                            <p style="color: var(--gray); padding-left: 34px;">
+                                You'll receive watermarked previews and can request changes before the final
+                                delivery.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 RkadeGfx. All rights reserved.</p>
+            <p>3+ Years Experience • Forever top quality</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Enhanced smooth animations
+        document.addEventListener('DOMContentLoaded', function () {
+            // Apply float-in animations
+            const floatElements = document.querySelectorAll('.float-in');
+            floatElements.forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+
+            // Content reveal on scroll
+            const revealElements = document.querySelectorAll('.content-reveal');
+
+            const revealOnScroll = function () {
+                revealElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+
+            // Initial check
+            revealOnScroll();
+
+            // Check on scroll
+            window.addEventListener('scroll', revealOnScroll);
+
+            // Form handling
+            const contactForm = document.getElementById('contact-form');
+            const formSubmitted = document.getElementById('form-submitted');
+
+            if (contactForm) {
+                // Add input focus effects
+                const formInputs = contactForm.querySelectorAll('input, select, textarea');
+                formInputs.forEach(input => {
+                    input.addEventListener('focus', function () {
+                        this.parentElement.style.transform = 'translateY(-2px)';
+                    });
+
+                    input.addEventListener('blur', function () {
+                        this.parentElement.style.transform = 'translateY(0)';
+                    });
+                });
+
+                // Form validation and submission
+                contactForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    // Basic validation
+                    let isValid = true;
+                    const requiredFields = contactForm.querySelectorAll('[required]');
+
+                    requiredFields.forEach(field => {
+                        if (!field.value.trim()) {
+                            isValid = false;
+                            field.style.borderColor = '#ef4444';
+                            const errorElement = field.parentElement.querySelector('.error');
+                            if (errorElement) {
+                                errorElement.textContent = 'This field is required';
+                                errorElement.style.display = 'block';
+                            }
+                        } else {
+                            field.style.borderColor = '';
+                            const errorElement = field.parentElement.querySelector('.error');
+                            if (errorElement) {
+                                errorElement.style.display = 'none';
+                            }
+                        }
+                    });
+
+                    if (!isValid) return;
+
+                    // Get form data
+                    const formData = {
+                        name: document.getElementById('name').value,
+                        contact: document.getElementById('contact').value,
+                        projectType: document.getElementById('project-type').value,
+                        message: document.getElementById('message').value
+                    };
+
+                    // Log to console
+                    console.log('Form submitted:', formData);
+
+                    // Show success message
+                    if (formSubmitted) {
+                        contactForm.style.display = 'none';
+                        formSubmitted.style.display = 'block';
+
+                        // Reset form after 5 seconds
+                        setTimeout(() => {
+                            contactForm.reset();
+                            formSubmitted.style.display = 'none';
+                            contactForm.style.display = 'block';
+                        }, 5000);
+                    }
+                });
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Add floating animation
+            const floatingElements = document.querySelectorAll('.floating');
+            floatingElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+    </script>
+</body>
+
+</html>
