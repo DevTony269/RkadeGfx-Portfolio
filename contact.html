@@ -523,10 +523,16 @@
                     window.history.replaceState({}, document.title, window.location.pathname);
 
                     // Hide success after 8 seconds and show form again
+                    // Reset form after 8 seconds and restore button
                     setTimeout(() => {
                         contactForm.reset();
                         formSubmitted.style.display = 'none';
                         contactForm.style.display = 'block';
+                        
+                        // IMPORTANT: Reset the button state too!
+                        const submitBtn = contactForm.querySelector('button[type="submit"]');
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message';
+                        submitBtn.disabled = false;
                     }, 8000);
                 }
             }
@@ -711,6 +717,7 @@
 </body>
 
 </html>
+
 
 
 
