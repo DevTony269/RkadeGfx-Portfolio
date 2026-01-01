@@ -240,20 +240,25 @@
                                 <h4 style="color: #22c55e; margin-bottom: 10px; font-size: 1.5rem;">Message Sent
                                     Successfully!</h4>
                                 <p style="color: var(--gray);">I'll get back to you as soon as possible.</p>
+                                <p style="color: var(--gray); font-size: 0.9rem; margin-top: 10px;">
+                                    <i class="fas fa-envelope" style="margin-right: 5px;"></i>
+                                    You should receive a confirmation email shortly.
+                                </p>
                             </div>
                         </div>
 
-                        <!-- Replace line: <form id="contact-form"> -->
+                        <!-- UPDATED FORM TAG WITH FORMSUBMIT.CO -->
                         <form id="contact-form" action="https://formsubmit.co/twang10269@gmail.com" method="POST">
-                            
-                            <!-- Add these hidden fields right after opening <form> tag: -->
+                            <!-- HIDDEN FIELDS FOR FORMSUBMIT -->
                             <input type="hidden" name="_subject" value="New Commission Inquiry - RkadeGfx">
                             <input type="hidden" name="_template" value="table">
-                            <input type="hidden" name="_autoresponse" value="Thank you for your inquiry! I'll review your project details and get back to you within 24 hours.">
-                            <input type="hidden" name="_next" value="https://devtony269.github.io/RkadeGfx-Portfolio/contact.html?submitted=true">
+                            <input type="hidden" name="_autoresponse"
+                                value="Thank you for your inquiry! I'll review your project details and get back to you within 24 hours.">
+                            <input type="hidden" name="_next"
+                                value="https://devtony269.github.io/RkadeGfx-Portfolio/contact.html?success=true">
                             <input type="hidden" name="_captcha" value="false">
-                            
-                            <!-- Your existing form fields continue below... -->
+
+                            <!-- YOUR EXISTING FORM FIELDS -->
                             <div class="form-group float-in delay-1">
                                 <label for="name" style="padding-top: 20px;">Your Name *</label>
                                 <input type="text" id="name" name="name" required placeholder="Enter your name"
@@ -500,21 +505,21 @@
     <script>
         // Enhanced smooth animations
         document.addEventListener('DOMContentLoaded', function () {
-            // Check for success parameter in URL
+            // Check for success parameter in URL (when redirected back)
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('submitted')) {
-                // Remove the parameter from URL without reloading
-                window.history.replaceState({}, document.title, window.location.pathname);
-                
-                // Show success message
+            if (urlParams.has('success')) {
+                // Show success message automatically when page loads with ?success=true
                 const contactForm = document.getElementById('contact-form');
                 const formSubmitted = document.getElementById('form-submitted');
-                
+
                 if (contactForm && formSubmitted) {
                     contactForm.style.display = 'none';
                     formSubmitted.style.display = 'block';
                     formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
+
+                    // Remove the success parameter from URL without reloading
+                    window.history.replaceState({}, document.title, window.location.pathname);
+
                     // Hide success after 8 seconds and show form again
                     setTimeout(() => {
                         contactForm.reset();
@@ -552,28 +557,28 @@
             // Form handling
             const contactForm = document.getElementById('contact-form');
             const formSubmitted = document.getElementById('form-submitted');
-            
+
             if (contactForm) {
-                // Add input focus effects (keep this if you want)
+                // Add input focus effects (keep this)
                 const formInputs = contactForm.querySelectorAll('input, select, textarea');
                 formInputs.forEach(input => {
                     input.addEventListener('focus', function () {
                         this.parentElement.style.transform = 'translateY(-2px)';
                     });
-            
+
                     input.addEventListener('blur', function () {
                         this.parentElement.style.transform = 'translateY(0)';
                     });
                 });
-            
+
                 // Form validation and submission
                 contactForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-            
+
                     // Basic validation
                     let isValid = true;
                     const requiredFields = contactForm.querySelectorAll('[required]');
-            
+
                     requiredFields.forEach(field => {
                         if (!field.value.trim()) {
                             isValid = false;
@@ -591,59 +596,53 @@
                             }
                         }
                     });
-            
+
                     if (!isValid) return;
-            
+
                     // Show loading state
                     const submitBtn = this.querySelector('button[type="submit"]');
                     const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
-            
-                    // Submit the form using FormSubmit.co
+
+                    // Submit the form to FormSubmit.co using fetch API
                     const formData = new FormData(this);
-                    
+
                     fetch(this.action, {
-                        method: this.method,
+                        method: 'POST',
                         body: formData,
                         headers: {
                             'Accept': 'application/json'
                         }
                     })
-                    .then(response => {
-                        if (response.ok) {
-                            // Show success message
-                            if (formSubmitted) {
-                                contactForm.style.display = 'none';
-                                formSubmitted.style.display = 'block';
-                                
-                                // Optional: Scroll to success message
-                                formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                
-                                // Don't reset immediately - wait for user to see success message
-                                setTimeout(() => {
-                                    contactForm.reset();
-                                    formSubmitted.style.display = 'none';
-                                    contactForm.style.display = 'block';
-                                }, 8000); // 8 seconds instead of 5
+                        .then(response => {
+                            if (response.ok) {
+                                // Show success message
+                                if (formSubmitted) {
+                                    contactForm.style.display = 'none';
+                                    formSubmitted.style.display = 'block';
+
+                                    // Optional: Scroll to success message
+                                    formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                                    // Don't reset immediately - let user see success message
+                                    // The page will redirect based on _next parameter
+                                }
+                            } else {
+                                throw new Error('Form submission failed');
                             }
-                        } else {
-                            throw new Error('Form submission failed');
-                        }
-                    })
-                    .catch(error => {
-                        // Show error message
-                        alert('Oops! There was an error sending your message. Please try again or contact me directly via Discord.');
-                        console.error('Form submission error:', error);
-                    })
-                    .finally(() => {
-                        // Reset button state
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    });
+                        })
+                        .catch(error => {
+                            // Show error message
+                            alert('Oops! There was an error sending your message. Please try again or contact me directly via Discord.');
+                            console.error('Form submission error:', error);
+
+                            // Reset button
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        });
                 });
             }
-
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
@@ -669,6 +668,5 @@
         });
     </script>
 </body>
-
 
 </html>
