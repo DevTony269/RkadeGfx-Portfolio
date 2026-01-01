@@ -659,7 +659,7 @@
                     const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
-            
+                    
                     // Submit the form
                     const formData = new FormData(this);
                     
@@ -677,6 +677,17 @@
                                 contactForm.style.display = 'none';
                                 formSubmitted.style.display = 'block';
                                 formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                
+                                // Reset form and button after 8 seconds
+                                setTimeout(() => {
+                                    contactForm.reset();
+                                    formSubmitted.style.display = 'none';
+                                    contactForm.style.display = 'block';
+                                    
+                                    // Reset the button state
+                                    submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message';
+                                    submitBtn.disabled = false;
+                                }, 8000);
                             }
                         } else {
                             throw new Error('Form submission failed');
@@ -688,7 +699,6 @@
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
                     });
-                });
             }
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -717,6 +727,7 @@
 </body>
 
 </html>
+
 
 
 
