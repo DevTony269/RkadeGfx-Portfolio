@@ -258,7 +258,7 @@ section {
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
 }
 
@@ -270,13 +270,6 @@ section {
     transition: var(--transition);
 }
 
-.square {
-    aspect-ratio: 1/1;
-}
-
-.rectangle {
-    aspect-ratio: 16/9;
-}
 
 .portfolio-item:hover {
     transform: translateY(-8px);
@@ -317,6 +310,11 @@ section {
     letter-spacing: 1px;
     opacity: 0.9;
 }
+
+.portfolio-item.banner {
+    aspect-ratio: 16/8;
+}
+
 
 /* Commissions Section */
 .commissions-grid {
@@ -620,7 +618,7 @@ section {
 }
 
 /* Responsive Design */
-@media (max-width: 1024px) {
+@media (max-width: 1524px) {
     .section-title {
         font-size: 3rem;
     }
@@ -631,7 +629,7 @@ section {
     }
 
     .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(3, 1fr);
     }
 }
 
@@ -675,7 +673,7 @@ section {
     }
 
     .portfolio-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 3fr;
     }
 
     .commissions-grid {
@@ -958,39 +956,6 @@ img {
     }
 }
 
-@media (max-width: 768px) {
-    .portfolio-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .portfolio-item.rectangle,
-    .portfolio-item.square {
-        width: 100%;
-        max-width: 500px;
-        flex: 0 0 auto;
-    }
-
-    .portfolio-item.rectangle {
-        height: 281px;
-        /* 16:9 ratio for mobile */
-    }
-
-    .portfolio-item.square {
-        height: 500px;
-    }
-}
-
-@media (max-width: 480px) {
-    .portfolio-item.rectangle {
-        height: 250px;
-        /* Smaller height on very small screens */
-    }
-
-    .portfolio-item.square {
-        height: 200px;
-    }
-}
 
 .hero {
     background: linear-gradient(135deg, #0a010e 15%, #611888 50%, #280439 100%);
@@ -1002,22 +967,133 @@ img {
 
 }
 
-/* Square items (Logos and PFPs) */
+.square {
+    aspect-ratio: 1/1;
+}
+
+.rectangle {
+    aspect-ratio: 16/9;
+}
+
+
+
+
+
+/* FIXED PORTFOLIO GRID - 3 columns to 1 column */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* Always 3 columns on desktop */
+    gap: 24px;
+    margin-top: 40px;
+    width: 100%;
+}
+
+/* Remove the old square/rectangle classes and use consistent sizing */
+.portfolio-item {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    background: var(--dark-light);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    width: 100%;
+}
+
+.portfolio-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--primary);
+}
+
+/* Square items (Logos and PFPs) - 1:1 ratio - AUTO SCALES */
 .portfolio-item.square1 {
-    width: 346.67px;
-    height: 346.67px;
-    flex: 0 0 300px;
+    aspect-ratio: 1 / 1;
+    /* Remove fixed width/height - let grid control the size */
 }
 
-/* Rectangle item (Thumbnail) */
+/* Rectangle items (Thumbnails) - 16:9 ratio - AUTO SCALES */
 .portfolio-item.rectangle1 {
-    width: auto;
-    /* 16:9 ratio based on 300px height */
-    height: 195px;
-    flex: 0 0 534px;
+    aspect-ratio: 16 / 9;
+    /* Remove fixed width/height - let grid control the size */
 }
 
+/* Banner items - Wide format - AUTO SCALES */
 .portfolio-item.banner {
-    width: 1137px;
-    height: 200px;
+    aspect-ratio: 16 / 2.5;
+    /* Use 16:9 for consistency */
+    grid-column: 1 / -1;
+    /* Makes banner span full width across all 3 columns */
+    width: 100%;
+    /* Ensure it takes full grid width */
+    max-width: 100%;
+    /* Prevent overflow */
+}
+
+/* Image styling */
+.portfolio-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: var(--transition);
+}
+
+.portfolio-item:hover .portfolio-image {
+    transform: scale(1.05);
+}
+
+/* Category tag positioning */
+.category-tag {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 3;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* RESPONSIVE BREAKPOINTS */
+
+/* Tablets and below - Switch to 1 column (900px and below) */
+@media (max-width: 900px) {
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+        /* Single column */
+        gap: 20px;
+    }
+}
+
+
+
+/* Animation for portfolio items */
+.portfolio-item {
+    opacity: 0;
+    transform: scale(0.95);
+    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.portfolio-item.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.portfolio-item.hidden {
+    display: none !important;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
