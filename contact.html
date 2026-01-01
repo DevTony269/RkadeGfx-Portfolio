@@ -243,7 +243,17 @@
                             </div>
                         </div>
 
-                        <form id="contact-form">
+                        <!-- Replace line: <form id="contact-form"> -->
+                        <form id="contact-form" action="https://formsubmit.co/twang10269@gmail.com" method="POST">
+                            
+                            <!-- Add these hidden fields right after opening <form> tag: -->
+                            <input type="hidden" name="_subject" value="New Commission Inquiry - RkadeGfx">
+                            <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_autoresponse" value="Thank you for your inquiry! I'll review your project details and get back to you within 24 hours.">
+                            <input type="hidden" name="_next" value="https://devtony269.github.io/RkadeGfx-Portfolio/contact.html?submitted=true">
+                            <input type="hidden" name="_captcha" value="false">
+                            
+                            <!-- Your existing form fields continue below... -->
                             <div class="form-group float-in delay-1">
                                 <label for="name" style="padding-top: 20px;">Your Name *</label>
                                 <input type="text" id="name" name="name" required placeholder="Enter your name"
@@ -490,6 +500,29 @@
     <script>
         // Enhanced smooth animations
         document.addEventListener('DOMContentLoaded', function () {
+            // Check for success parameter in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('submitted')) {
+                // Remove the parameter from URL without reloading
+                window.history.replaceState({}, document.title, window.location.pathname);
+                
+                // Show success message
+                const contactForm = document.getElementById('contact-form');
+                const formSubmitted = document.getElementById('form-submitted');
+                
+                if (contactForm && formSubmitted) {
+                    contactForm.style.display = 'none';
+                    formSubmitted.style.display = 'block';
+                    formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Hide success after 8 seconds and show form again
+                    setTimeout(() => {
+                        contactForm.reset();
+                        formSubmitted.style.display = 'none';
+                        contactForm.style.display = 'block';
+                    }, 8000);
+                }
+            }
             // Apply float-in animations
             const floatElements = document.querySelectorAll('.float-in');
             floatElements.forEach(el => {
@@ -519,28 +552,28 @@
             // Form handling
             const contactForm = document.getElementById('contact-form');
             const formSubmitted = document.getElementById('form-submitted');
-
+            
             if (contactForm) {
-                // Add input focus effects
+                // Add input focus effects (keep this if you want)
                 const formInputs = contactForm.querySelectorAll('input, select, textarea');
                 formInputs.forEach(input => {
                     input.addEventListener('focus', function () {
                         this.parentElement.style.transform = 'translateY(-2px)';
                     });
-
+            
                     input.addEventListener('blur', function () {
                         this.parentElement.style.transform = 'translateY(0)';
                     });
                 });
-
+            
                 // Form validation and submission
                 contactForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-
+            
                     // Basic validation
                     let isValid = true;
                     const requiredFields = contactForm.querySelectorAll('[required]');
-
+            
                     requiredFields.forEach(field => {
                         if (!field.value.trim()) {
                             isValid = false;
@@ -558,32 +591,56 @@
                             }
                         }
                     });
-
+            
                     if (!isValid) return;
-
-                    // Get form data
-                    const formData = {
-                        name: document.getElementById('name').value,
-                        contact: document.getElementById('contact').value,
-                        projectType: document.getElementById('project-type').value,
-                        message: document.getElementById('message').value
-                    };
-
-                    // Log to console
-                    console.log('Form submitted:', formData);
-
-                    // Show success message
-                    if (formSubmitted) {
-                        contactForm.style.display = 'none';
-                        formSubmitted.style.display = 'block';
-
-                        // Reset form after 5 seconds
-                        setTimeout(() => {
-                            contactForm.reset();
-                            formSubmitted.style.display = 'none';
-                            contactForm.style.display = 'block';
-                        }, 5000);
-                    }
+            
+                    // Show loading state
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    submitBtn.disabled = true;
+            
+                    // Submit the form using FormSubmit.co
+                    const formData = new FormData(this);
+                    
+                    fetch(this.action, {
+                        method: this.method,
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Show success message
+                            if (formSubmitted) {
+                                contactForm.style.display = 'none';
+                                formSubmitted.style.display = 'block';
+                                
+                                // Optional: Scroll to success message
+                                formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                
+                                // Don't reset immediately - wait for user to see success message
+                                setTimeout(() => {
+                                    contactForm.reset();
+                                    formSubmitted.style.display = 'none';
+                                    contactForm.style.display = 'block';
+                                }, 8000); // 8 seconds instead of 5
+                            }
+                        } else {
+                            throw new Error('Form submission failed');
+                        }
+                    })
+                    .catch(error => {
+                        // Show error message
+                        alert('Oops! There was an error sending your message. Please try again or contact me directly via Discord.');
+                        console.error('Form submission error:', error);
+                    })
+                    .finally(() => {
+                        // Reset button state
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    });
                 });
             }
 
@@ -612,5 +669,6 @@
         });
     </script>
 </body>
+
 
 </html>
