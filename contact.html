@@ -603,21 +603,21 @@
                 // Show success message automatically when page loads with ?success=true
                 const contactForm = document.getElementById('contact-form');
                 const formSubmitted = document.getElementById('form-submitted');
-
+    
                 if (contactForm && formSubmitted) {
                     contactForm.style.display = 'none';
                     formSubmitted.style.display = 'block';
                     formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
+    
                     // Remove the success parameter from URL without reloading
                     window.history.replaceState({}, document.title, window.location.pathname);
-
+    
                     // Hide success after 8 seconds and show form again
                     setTimeout(() => {
                         contactForm.reset();
                         formSubmitted.style.display = 'none';
                         contactForm.style.display = 'block';
-
+                    
                         // Reset submit button
                         const submitBtn = contactForm.querySelector('button[type="submit"]');
                         submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message';
@@ -625,37 +625,37 @@
                     }, 8000);
                 }
             }
-
+            
             // Apply float-in animations
             const floatElements = document.querySelectorAll('.float-in');
             floatElements.forEach(el => {
                 el.style.animationPlayState = 'running';
             });
-
+    
             // Content reveal on scroll
             const revealElements = document.querySelectorAll('.content-reveal');
-
+    
             const revealOnScroll = function () {
                 revealElements.forEach(element => {
                     const elementTop = element.getBoundingClientRect().top;
                     const elementVisible = 150;
-
+    
                     if (elementTop < window.innerHeight - elementVisible) {
                         element.classList.add('visible');
                     }
                 });
             };
-
+    
             // Initial check
             revealOnScroll();
-
+    
             // Check on scroll
             window.addEventListener('scroll', revealOnScroll);
-
+    
             // Form handling
             const contactForm = document.getElementById('contact-form');
             const formSubmitted = document.getElementById('form-submitted');
-
+    
             if (contactForm) {
                 // Add input focus effects
                 const formInputs = contactForm.querySelectorAll('input, select, textarea');
@@ -663,21 +663,21 @@
                     input.addEventListener('focus', function () {
                         this.parentElement.style.transform = 'translateY(-2px)';
                     });
-
+    
                     input.addEventListener('blur', function () {
                         this.parentElement.style.transform = 'translateY(0)';
                     });
                 });
-
-                // Form validation and submission - SIMPLE & WORKING VERSION
+    
+                // Form validation and submission - SIMPLE VERSION
                 contactForm.addEventListener('submit', function (e) {
-                    // ALWAYS prevent default first
+                    // ALWAYS prevent default to run validation first
                     e.preventDefault();
-
+                    
                     // Run validation
                     let isValid = true;
                     const requiredFields = this.querySelectorAll('[required]');
-
+    
                     // Clear previous errors
                     this.querySelectorAll('.error').forEach(error => {
                         error.style.display = 'none';
@@ -685,7 +685,7 @@
                     this.querySelectorAll('input, select, textarea').forEach(field => {
                         field.style.borderColor = '';
                     });
-
+    
                     // Validate required fields
                     requiredFields.forEach(field => {
                         if (!field.value.trim()) {
@@ -698,7 +698,7 @@
                             }
                         }
                     });
-
+    
                     // Also validate contact field format
                     const contactField = document.getElementById('contact');
                     if (contactField && contactField.value.trim()) {
@@ -706,7 +706,7 @@
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                         const discordRegex = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
                         const twitterRegex = /^@?\w{1,15}$/;
-
+                        
                         if (!emailRegex.test(value) && !discordRegex.test(value) && !twitterRegex.test(value) && !value.includes('@')) {
                             isValid = false;
                             contactField.style.borderColor = '#ef4444';
@@ -717,7 +717,7 @@
                             }
                         }
                     }
-
+    
                     if (!isValid) {
                         // Show shake animation on invalid fields
                         const invalidFields = this.querySelectorAll('[style*="border-color: #ef4444"]');
@@ -729,32 +729,49 @@
                         });
                         return; // Stop here if invalid
                     }
-
-                    // If form is valid, show loading and submit PROGRAMMATICALLY
+    
+                    // If form is valid, show loading state
                     const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
-
-                    // Create a clone of the form without event listeners
-                    const formClone = this.cloneNode(true);
-                    formClone.style.display = 'none';
-                    document.body.appendChild(formClone);
-
-                    // Submit the cloned form (this bypasses event listeners)
-                    formClone.submit();
-
-                    // Optionally remove the clone after a delay
-                    setTimeout(() => {
-                        document.body.removeChild(formClone);
-                    }, 3000);
+    
+                    // REMOVED: Don't show success message here!
+                    // REMOVED: contactForm.style.display = 'none';
+                    // REMOVED: formSubmitted.style.display = 'block';
+                    
+                    // IMPORTANT: Create a new form element without event listeners
+                    // This ensures the form submits properly
+                    const tempForm = document.createElement('form');
+                    tempForm.action = this.action;
+                    tempForm.method = this.method;
+                    tempForm.style.display = 'none';
+                    
+                    // Copy all form data
+                    const formData = new FormData(this);
+                    for (let [name, value] of formData.entries()) {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = name;
+                        input.value = value;
+                        tempForm.appendChild(input);
+                    }
+                    
+                    // Add to page and submit
+                    document.body.appendChild(tempForm);
+                    tempForm.submit();
+                    
+                    // The page will now redirect to FormSubmit.co
+                    // FormSubmit.co will process and redirect back to contact.html?success=true
+                    // The success message will show from the URL parameter handler (lines 9-31)
                 });
-
+                
                 // Smooth scrolling for anchor links
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                     anchor.addEventListener('click', function (e) {
                         const targetId = this.getAttribute('href');
                         if (targetId === '#') return;
-
+    
                         const targetElement = document.querySelector(targetId);
                         if (targetElement) {
                             e.preventDefault();
@@ -765,7 +782,7 @@
                         }
                     });
                 });
-
+    
                 // Add floating animation
                 const floatingElements = document.querySelectorAll('.floating');
                 floatingElements.forEach((el, index) => {
@@ -777,4 +794,5 @@
 </body>
 
 </html>
+
 
