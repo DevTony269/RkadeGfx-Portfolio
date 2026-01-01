@@ -491,6 +491,11 @@ section {
     gap: 48px;
 }
 
+#contact-form button {
+    display: block;
+    margin: 0 auto;
+}
+
 .contact-form {
     background: var(--dark-light);
     border: 1px solid rgba(139, 92, 246, 0.2);
@@ -1121,3 +1126,4 @@ img {
         transform: translateY(0) scale(1);
     }
 }
+
