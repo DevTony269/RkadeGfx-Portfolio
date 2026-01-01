@@ -553,57 +553,104 @@
             // Form handling
             const contactForm = document.getElementById('contact-form');
             const formSubmitted = document.getElementById('form-submitted');
-
+            
             if (contactForm) {
-                // Add input focus effects (keep this)
+                // Add input focus effects
                 const formInputs = contactForm.querySelectorAll('input, select, textarea');
                 formInputs.forEach(input => {
                     input.addEventListener('focus', function () {
                         this.parentElement.style.transform = 'translateY(-2px)';
                     });
-
+            
                     input.addEventListener('blur', function () {
                         this.parentElement.style.transform = 'translateY(0)';
                     });
                 });
-
+            
                 // Form validation and submission
                 contactForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-
-                    // Basic validation
+            
+                    // First, define validation functions
+                    function isValidEmail(email) {
+                        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return re.test(email);
+                    }
+            
+                    function isValidDiscord(username) {
+                        const re = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
+                        return re.test(username);
+                    }
+            
+                    function isValidTwitter(handle) {
+                        const re = /^@?\w{1,15}$/;
+                        return re.test(handle);
+                    }
+            
+                    function isValidContact(value) {
+                        const trimmed = value.trim();
+                        if (isValidEmail(trimmed)) return true;
+                        if (isValidDiscord(trimmed)) return true;
+                        if (isValidTwitter(trimmed)) return true;
+                        if (trimmed.includes('@')) return true;
+                        return false;
+                    }
+            
+                    // Start validation
                     let isValid = true;
                     const requiredFields = contactForm.querySelectorAll('[required]');
-
+            
                     requiredFields.forEach(field => {
+                        const errorElement = field.parentElement.querySelector('.error');
+                        
+                        if (errorElement) {
+                            errorElement.style.display = 'none';
+                            errorElement.textContent = '';
+                        }
+                        field.style.borderColor = '';
+            
                         if (!field.value.trim()) {
                             isValid = false;
                             field.style.borderColor = '#ef4444';
-                            const errorElement = field.parentElement.querySelector('.error');
                             if (errorElement) {
                                 errorElement.textContent = 'This field is required';
                                 errorElement.style.display = 'block';
                             }
-                        } else {
-                            field.style.borderColor = '';
-                            const errorElement = field.parentElement.querySelector('.error');
-                            if (errorElement) {
-                                errorElement.style.display = 'none';
+                        } 
+                        else if (field.id === 'contact' || field.name === 'contact') {
+                            const value = field.value.trim();
+                            
+                            if (!isValidContact(value)) {
+                                isValid = false;
+                                field.style.borderColor = '#ef4444';
+                                if (errorElement) {
+                                    errorElement.textContent = 'Please enter a valid email, Discord (username#0000), or Twitter handle (@username)';
+                                    errorElement.style.display = 'block';
+                                }
                             }
                         }
                     });
-
-                    if (!isValid) return;
-
+            
+                    if (!isValid) {
+                        const invalidFields = contactForm.querySelectorAll('[style*="border-color: #ef4444"]');
+                        invalidFields.forEach(field => {
+                            field.style.animation = 'shake 0.5s';
+                            setTimeout(() => {
+                                field.style.animation = '';
+                            }, 500);
+                        });
+                        return;
+                    }
+            
                     // Show loading state
                     const submitBtn = this.querySelector('button[type="submit"]');
                     const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
-
-                    // Submit the form to FormSubmit.co using fetch API
+            
+                    // Submit the form
                     const formData = new FormData(this);
-
+                    
                     fetch(this.action, {
                         method: 'POST',
                         body: formData,
@@ -611,32 +658,24 @@
                             'Accept': 'application/json'
                         }
                     })
-                        .then(response => {
-                            if (response.ok) {
-                                // Show success message
-                                if (formSubmitted) {
-                                    contactForm.style.display = 'none';
-                                    formSubmitted.style.display = 'block';
-
-                                    // Optional: Scroll to success message
-                                    formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                                    // Don't reset immediately - let user see success message
-                                    // The page will redirect based on _next parameter
-                                }
-                            } else {
-                                throw new Error('Form submission failed');
+                    .then(response => {
+                        if (response.ok) {
+                            // Show success message
+                            if (formSubmitted) {
+                                contactForm.style.display = 'none';
+                                formSubmitted.style.display = 'block';
+                                formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             }
-                        })
-                        .catch(error => {
-                            // Show error message
-                            alert('Oops! There was an error sending your message. Please try again or contact me directly via Discord.');
-                            console.error('Form submission error:', error);
-
-                            // Reset button
-                            submitBtn.innerHTML = originalText;
-                            submitBtn.disabled = false;
-                        });
+                        } else {
+                            throw new Error('Form submission failed');
+                        }
+                    })
+                    .catch(error => {
+                        alert('Oops! There was an error sending your message. Please try again or contact me directly via Discord.');
+                        console.error('Form submission error:', error);
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    });
                 });
             }
             // Smooth scrolling for anchor links
@@ -666,5 +705,6 @@
 </body>
 
 </html>
+
 
 
