@@ -18,11 +18,7 @@
         }
 
         /* Consistent animation timing */
-        .portfolio-animate {
-            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
+
 
         @keyframes fadeInUp {
             to {
@@ -40,7 +36,7 @@
 
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(3, minmax(200px, 1fr));
             gap: 24px;
             position: relative;
         }
@@ -251,6 +247,8 @@
             min-width: 180px;
         }
 
+
+
         /* Loading state */
         .loading-indicator {
             position: fixed;
@@ -280,46 +278,30 @@
             }
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 1024px) {
-            .portfolio-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                gap: 20px;
+        @media (max-width: 900px) {
+            .filter-btn {
+                padding: 10px 20px;
+                min-width: 100px;
+                font-size: 0.9rem;
             }
         }
 
-        @media (max-width: 900px) {
-            .portfolio-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 16px;
-            }
-
-            .portfolio-filter {
-                gap: 8px;
-            }
-
+        @media (max-width: 690px) {
             .filter-btn {
                 padding: 10px 20px;
                 min-width: 100px;
                 font-size: 0.9rem;
             }
 
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-
-            .stat-number {
-                font-size: 2.5rem;
+            .portfolio-grid {
+                display: grid;
+                grid-template-columns: repeat(1, minmax(200px, 1fr));
+                gap: 24px;
+                position: relative;
             }
         }
 
         @media (max-width: 500px) {
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
             .portfolio-filter {
                 flex-direction: column;
                 align-items: center;
@@ -328,11 +310,6 @@
             .filter-btn {
                 width: 100%;
                 max-width: 200px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
             }
 
             .cta-buttons {
@@ -593,6 +570,4 @@
     </script>
 </body>
 
-
 </html>
-
