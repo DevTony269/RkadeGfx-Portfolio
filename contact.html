@@ -580,25 +580,24 @@
                 });
             
                 // Form validation and submission
+                // Form validation and submission
                 contactForm.addEventListener('submit', function (e) {
-                    e.preventDefault();
-            
                     // First, define validation functions
                     function isValidEmail(email) {
                         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                         return re.test(email);
                     }
-            
+                
                     function isValidDiscord(username) {
                         const re = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
                         return re.test(username);
                     }
-            
+                
                     function isValidTwitter(handle) {
                         const re = /^@?\w{1,15}$/;
                         return re.test(handle);
                     }
-            
+                
                     function isValidContact(value) {
                         const trimmed = value.trim();
                         if (isValidEmail(trimmed)) return true;
@@ -607,11 +606,11 @@
                         if (trimmed.includes('@')) return true;
                         return false;
                     }
-            
+                
                     // Start validation
                     let isValid = true;
-                    const requiredFields = contactForm.querySelectorAll('[required]');
-            
+                    const requiredFields = this.querySelectorAll('[required]');
+                
                     requiredFields.forEach(field => {
                         const errorElement = field.parentElement.querySelector('.error');
                         
@@ -620,7 +619,7 @@
                             errorElement.textContent = '';
                         }
                         field.style.borderColor = '';
-            
+                
                         if (!field.value.trim()) {
                             isValid = false;
                             field.style.borderColor = '#ef4444';
@@ -642,9 +641,11 @@
                             }
                         }
                     });
-            
+                
                     if (!isValid) {
-                        const invalidFields = contactForm.querySelectorAll('[style*="border-color: #ef4444"]');
+                        e.preventDefault(); // Only prevent submission if invalid
+                        
+                        const invalidFields = this.querySelectorAll('[style*="border-color: #ef4444"]');
                         invalidFields.forEach(field => {
                             field.style.animation = 'shake 0.5s';
                             setTimeout(() => {
@@ -653,14 +654,15 @@
                         });
                         return;
                     }
-            
-                    // Show loading state
+                
+                    // If form is valid, show loading state but don't prevent submission
                     const submitBtn = this.querySelector('button[type="submit"]');
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
                     
-                    // Let FormSubmit.co handle submission and redirect
-                    this.submit();
+                    // Form will submit naturally to FormSubmit.co
+                    // FormSubmit.co will redirect back with ?success=true
+                    // Your URL parameter handler (lines 7-31) will show success message
                 });
                 
                 // Smooth scrolling for anchor links
@@ -691,6 +693,7 @@
 </body>
 
 </html>
+
 
 
 
