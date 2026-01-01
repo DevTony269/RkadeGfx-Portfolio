@@ -618,6 +618,11 @@
                         contactForm.reset();
                         formSubmitted.style.display = 'none';
                         contactForm.style.display = 'block';
+                    
+                        // FIX: Reset submit button
+                        const submitBtn = contactForm.querySelector('button[type="submit"]');
+                        submitBtn.innerHTML = 'Send Message'; // or whatever your original text is
+                        submitBtn.disabled = false;
                     }, 8000);
                 }
             }
@@ -763,3 +768,4 @@
 </body>
 
 </html>
+
