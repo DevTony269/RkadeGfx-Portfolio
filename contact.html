@@ -699,6 +699,17 @@
                         submitBtn.innerHTML = originalText;
                         submitBtn.disabled = false;
                     });
+                    
+                    if (!isValid) return;
+                    
+                    // Show loading state
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    submitBtn.disabled = true;
+                    
+                    // Let FormSubmit.co handle submission and redirect
+                    this.submit();
+                });
             }
             // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -727,6 +738,7 @@
 </body>
 
 </html>
+
 
 
 
