@@ -104,7 +104,7 @@
         /* Enhanced stats */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
             gap: 24px;
             margin: 60px 0;
         }
@@ -207,6 +207,12 @@
                 transform: translateY(-10px);
             }
         }
+
+        @media (max-width: 628px) {
+            .triple {
+                grid-template-columns: 1fr !important;
+            }
+        }
     </style>
 </head>
 
@@ -247,7 +253,7 @@
     <section style="padding: 40px 0 80px;">
         <div class="container">
             <div class="content-grid"
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;">
+                style="display: grid; grid-template-columns: 1fr; gap: 60px; align-items: center;">
                 <div class="content-reveal float-in delay-1">
                     <div class="gradient-bg glow hover-lift">
                         <h2
@@ -282,7 +288,8 @@
                                 amazing but also performs well in metrics. Every project receives my full
                                 attention and dedication.
                             </p>
-                            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                            <div class="triple"
+                                style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; text-align: center;">
                                 <span
                                     style="background: rgba(139, 92, 246, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-size: 0.9rem;">On-time
                                     Delivery</span>
