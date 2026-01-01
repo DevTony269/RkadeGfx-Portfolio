@@ -513,55 +513,55 @@
                 // Show success message automatically when page loads with ?success=true
                 const contactForm = document.getElementById('contact-form');
                 const formSubmitted = document.getElementById('form-submitted');
-
+    
                 if (contactForm && formSubmitted) {
                     contactForm.style.display = 'none';
                     formSubmitted.style.display = 'block';
                     formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
+    
                     // Remove the success parameter from URL without reloading
                     window.history.replaceState({}, document.title, window.location.pathname);
-
+    
                     // Hide success after 8 seconds and show form again
-                    // Reset form after 8 seconds and restore button
                     setTimeout(() => {
                         contactForm.reset();
                         formSubmitted.style.display = 'none';
                         contactForm.style.display = 'block';
                         
-                        // IMPORTANT: Reset the button state too!
+                        // Reset the button state
                         const submitBtn = contactForm.querySelector('button[type="submit"]');
                         submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message';
                         submitBtn.disabled = false;
                     }, 8000);
                 }
             }
+            
             // Apply float-in animations
             const floatElements = document.querySelectorAll('.float-in');
             floatElements.forEach(el => {
                 el.style.animationPlayState = 'running';
             });
-
+    
             // Content reveal on scroll
             const revealElements = document.querySelectorAll('.content-reveal');
-
+    
             const revealOnScroll = function () {
                 revealElements.forEach(element => {
                     const elementTop = element.getBoundingClientRect().top;
                     const elementVisible = 150;
-
+    
                     if (elementTop < window.innerHeight - elementVisible) {
                         element.classList.add('visible');
                     }
                 });
             };
-
+    
             // Initial check
             revealOnScroll();
-
+    
             // Check on scroll
             window.addEventListener('scroll', revealOnScroll);
-
+    
             // Form handling
             const contactForm = document.getElementById('contact-form');
             const formSubmitted = document.getElementById('form-submitted');
@@ -656,88 +656,42 @@
             
                     // Show loading state
                     const submitBtn = this.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-                    submitBtn.disabled = true;
-                    
-                    // Submit the form
-                    const formData = new FormData(this);
-                    
-                    fetch(this.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            // Show success message
-                            if (formSubmitted) {
-                                contactForm.style.display = 'none';
-                                formSubmitted.style.display = 'block';
-                                formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                
-                                // Reset form and button after 8 seconds
-                                setTimeout(() => {
-                                    contactForm.reset();
-                                    formSubmitted.style.display = 'none';
-                                    contactForm.style.display = 'block';
-                                    
-                                    // Reset the button state
-                                    submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message';
-                                    submitBtn.disabled = false;
-                                }, 8000);
-                            }
-                        } else {
-                            throw new Error('Form submission failed');
-                        }
-                    })
-                    .catch(error => {
-                        alert('Oops! There was an error sending your message. Please try again or contact me directly via Discord.');
-                        console.error('Form submission error:', error);
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    });
-                    
-                    if (!isValid) return;
-                    
-                    // Show loading state
-                    const submitBtn = this.querySelector('button[type="submit"]');
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
                     
                     // Let FormSubmit.co handle submission and redirect
                     this.submit();
                 });
-            }
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                        e.preventDefault();
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 100,
-                            behavior: 'smooth'
-                        });
-                    }
+                
+                // Smooth scrolling for anchor links
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        const targetId = this.getAttribute('href');
+                        if (targetId === '#') return;
+    
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            e.preventDefault();
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
                 });
-            });
-
-            // Add floating animation
-            const floatingElements = document.querySelectorAll('.floating');
-            floatingElements.forEach((el, index) => {
-                el.style.animationDelay = `${index * 0.2}s`;
-            });
+    
+                // Add floating animation
+                const floatingElements = document.querySelectorAll('.floating');
+                floatingElements.forEach((el, index) => {
+                    el.style.animationDelay = `${index * 0.2}s`;
+                });
+            }
         });
     </script>
 </body>
 
 </html>
+
 
 
 
