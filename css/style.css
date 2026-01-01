@@ -633,6 +633,26 @@ section {
     }
 }
 
+@media (max-width: 1024px) {
+    .process-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 942px) {
+    .commissions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .commission-card h3 {
+        font-size: 2rem;
+    }
+
+    .commission-price {
+        font-size: 1.5rem;
+    }
+}
+
 @media (max-width: 768px) {
     .mobile-menu-btn {
         display: block;
@@ -696,6 +716,10 @@ section {
     .btn {
         width: 100%;
         max-width: 300px;
+    }
+
+    .process-grid {
+        grid-template-columns: 2fr;
     }
 }
 
