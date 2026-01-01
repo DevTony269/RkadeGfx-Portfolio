@@ -513,186 +513,166 @@
                 // Show success message automatically when page loads with ?success=true
                 const contactForm = document.getElementById('contact-form');
                 const formSubmitted = document.getElementById('form-submitted');
-    
+
                 if (contactForm && formSubmitted) {
                     contactForm.style.display = 'none';
                     formSubmitted.style.display = 'block';
                     formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
+
                     // Remove the success parameter from URL without reloading
                     window.history.replaceState({}, document.title, window.location.pathname);
-    
+
                     // Hide success after 8 seconds and show form again
                     setTimeout(() => {
                         contactForm.reset();
                         formSubmitted.style.display = 'none';
                         contactForm.style.display = 'block';
-                        
-                        // Reset the button state
-                        const submitBtn = contactForm.querySelector('button[type="submit"]');
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message';
-                        submitBtn.disabled = false;
                     }, 8000);
                 }
             }
-            
             // Apply float-in animations
             const floatElements = document.querySelectorAll('.float-in');
             floatElements.forEach(el => {
                 el.style.animationPlayState = 'running';
             });
-    
+
             // Content reveal on scroll
             const revealElements = document.querySelectorAll('.content-reveal');
-    
+
             const revealOnScroll = function () {
                 revealElements.forEach(element => {
                     const elementTop = element.getBoundingClientRect().top;
                     const elementVisible = 150;
-    
+
                     if (elementTop < window.innerHeight - elementVisible) {
                         element.classList.add('visible');
                     }
                 });
             };
-    
+
             // Initial check
             revealOnScroll();
-    
+
             // Check on scroll
             window.addEventListener('scroll', revealOnScroll);
-    
+
             // Form handling
             const contactForm = document.getElementById('contact-form');
             const formSubmitted = document.getElementById('form-submitted');
-            
+
             if (contactForm) {
-                // Add input focus effects
+                // Add input focus effects (keep this)
                 const formInputs = contactForm.querySelectorAll('input, select, textarea');
                 formInputs.forEach(input => {
                     input.addEventListener('focus', function () {
                         this.parentElement.style.transform = 'translateY(-2px)';
                     });
-            
+
                     input.addEventListener('blur', function () {
                         this.parentElement.style.transform = 'translateY(0)';
                     });
                 });
-            
-                // Form validation and submission
+
                 // Form validation and submission
                 contactForm.addEventListener('submit', function (e) {
-                    // First, define validation functions
-                    function isValidEmail(email) {
-                        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        return re.test(email);
-                    }
-                
-                    function isValidDiscord(username) {
-                        const re = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
-                        return re.test(username);
-                    }
-                
-                    function isValidTwitter(handle) {
-                        const re = /^@?\w{1,15}$/;
-                        return re.test(handle);
-                    }
-                
-                    function isValidContact(value) {
-                        const trimmed = value.trim();
-                        if (isValidEmail(trimmed)) return true;
-                        if (isValidDiscord(trimmed)) return true;
-                        if (isValidTwitter(trimmed)) return true;
-                        if (trimmed.includes('@')) return true;
-                        return false;
-                    }
-                
-                    // Start validation
+                    e.preventDefault();
+
+                    // Basic validation
                     let isValid = true;
-                    const requiredFields = this.querySelectorAll('[required]');
-                
+                    const requiredFields = contactForm.querySelectorAll('[required]');
+
                     requiredFields.forEach(field => {
-                        const errorElement = field.parentElement.querySelector('.error');
-                        
-                        if (errorElement) {
-                            errorElement.style.display = 'none';
-                            errorElement.textContent = '';
-                        }
-                        field.style.borderColor = '';
-                
                         if (!field.value.trim()) {
                             isValid = false;
                             field.style.borderColor = '#ef4444';
+                            const errorElement = field.parentElement.querySelector('.error');
                             if (errorElement) {
                                 errorElement.textContent = 'This field is required';
                                 errorElement.style.display = 'block';
                             }
-                        } 
-                        else if (field.id === 'contact' || field.name === 'contact') {
-                            const value = field.value.trim();
-                            
-                            if (!isValidContact(value)) {
-                                isValid = false;
-                                field.style.borderColor = '#ef4444';
-                                if (errorElement) {
-                                    errorElement.textContent = 'Please enter a valid email, Discord (username#0000), or Twitter handle (@username)';
-                                    errorElement.style.display = 'block';
-                                }
+                        } else {
+                            field.style.borderColor = '';
+                            const errorElement = field.parentElement.querySelector('.error');
+                            if (errorElement) {
+                                errorElement.style.display = 'none';
                             }
                         }
                     });
-                
-                    if (!isValid) {
-                        e.preventDefault(); // Only prevent submission if invalid
-                        
-                        const invalidFields = this.querySelectorAll('[style*="border-color: #ef4444"]');
-                        invalidFields.forEach(field => {
-                            field.style.animation = 'shake 0.5s';
-                            setTimeout(() => {
-                                field.style.animation = '';
-                            }, 500);
-                        });
-                        return;
-                    }
-                
-                    // If form is valid, show loading state but don't prevent submission
+
+                    if (!isValid) return;
+
+                    // Show loading state
                     const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
-                    
-                    // Form will submit naturally to FormSubmit.co
-                    // FormSubmit.co will redirect back with ?success=true
-                    // Your URL parameter handler (lines 7-31) will show success message
-                });
-                
-                // Smooth scrolling for anchor links
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        const targetId = this.getAttribute('href');
-                        if (targetId === '#') return;
-    
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            e.preventDefault();
-                            window.scrollTo({
-                                top: targetElement.offsetTop - 100,
-                                behavior: 'smooth'
-                            });
+
+                    // Submit the form to FormSubmit.co using fetch API
+                    const formData = new FormData(this);
+
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
                         }
-                    });
-                });
-    
-                // Add floating animation
-                const floatingElements = document.querySelectorAll('.floating');
-                floatingElements.forEach((el, index) => {
-                    el.style.animationDelay = `${index * 0.2}s`;
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Show success message
+                                if (formSubmitted) {
+                                    contactForm.style.display = 'none';
+                                    formSubmitted.style.display = 'block';
+
+                                    // Optional: Scroll to success message
+                                    formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                                    // Don't reset immediately - let user see success message
+                                    // The page will redirect based on _next parameter
+                                }
+                            } else {
+                                throw new Error('Form submission failed');
+                            }
+                        })
+                        .catch(error => {
+                            // Show error message
+                            alert('Oops! There was an error sending your message. Please try again or contact me directly via Discord.');
+                            console.error('Form submission error:', error);
+
+                            // Reset button
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        });
                 });
             }
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        e.preventDefault();
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Add floating animation
+            const floatingElements = document.querySelectorAll('.floating');
+            floatingElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.2}s`;
+            });
         });
     </script>
 </body>
 
 </html>
+
 
 
 
