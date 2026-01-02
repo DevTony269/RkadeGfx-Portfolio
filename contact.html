@@ -673,92 +673,116 @@
                 const contactField = document.getElementById('contact');
 
                 if (contactField) {
-                    // Validate on input (as user types)
+                    // Clear validation when user starts typing
                     contactField.addEventListener('input', function () {
-                        validateContactField(this);
+                        this.style.borderColor = '';
+                        const errorElement = this.parentElement.querySelector('.error');
+                        if (errorElement) {
+                            errorElement.style.display = 'none';
+                        }
                     });
 
                     // Validate on blur (when user leaves field)
                     contactField.addEventListener('blur', function () {
-                        validateContactField(this);
+                        validateContactField(this, false); // false = not on submit
                     });
 
-                    // Validation function
-                    function validateContactField(field) {
+                    // Improved validation function
+                    function validateContactField(field, isOnSubmit = false) {
                         const value = field.value.trim();
                         const errorElement = field.parentElement.querySelector('.error');
 
-                        // Clear error if field is empty (required validation will catch it on submit)
+                        // If empty, show "Please fill in this field" on blur AND on submit
                         if (!value) {
-                            field.style.borderColor = '';
+                            field.style.borderColor = '#ef4444'; // Red border
                             if (errorElement) {
-                                errorElement.style.display = 'none';
-                            }
-                            return;
-                        }
-
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        const discordRegex = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
-                        const twitterRegex = /^@?\w{1,15}$/;
-
-                        const isValid = emailRegex.test(value) ||
-                            discordRegex.test(value) ||
-                            twitterRegex.test(value) ||
-                            value.includes('@'); // Fallback for email-like
-
-                        if (isValid) {
-                            // Valid - show green check
-                            field.style.borderColor = '#22c55e'; // Green
-                            if (errorElement) {
-                                errorElement.style.display = 'none';
-                            }
-
-                            // Optional: Add a checkmark icon
-                            showValidationIcon(field, 'valid');
-                        } else {
-                            // Invalid - show red border and error
-                            field.style.borderColor = '#ef4444'; // Red
-                            if (errorElement) {
-                                errorElement.textContent = 'Please enter valid email, Discord (username#0000), or Twitter handle';
+                                errorElement.textContent = 'Please fill in this field';
                                 errorElement.style.display = 'block';
                             }
-
-                            // Optional: Add an X icon
-                            showValidationIcon(field, 'invalid');
-                        }
-                    }
-
-                    // Optional: Function to show validation icons
-                    function showValidationIcon(field, status) {
-                        // Remove existing icon
-                        const existingIcon = field.parentElement.querySelector('.validation-icon');
-                        if (existingIcon) {
-                            existingIcon.remove();
+                            return false;
                         }
 
-                        if (!field.value.trim()) return; // Don't show icon if empty
+                        // MORE COMPREHENSIVE VALIDATION - covers more cases
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/; // Better email regex
+                        const discordRegex = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
+                        const twitterRegex = /^@?[A-Za-z0-9_]{1,15}$/; // Twitter allows letters, numbers, underscore
 
-                        const icon = document.createElement('span');
-                        icon.className = 'validation-icon';
-                        icon.style.position = 'absolute';
-                        icon.style.right = '15px';
-                        icon.style.top = '50%';
-                        icon.style.transform = 'translateY(-50%)';
-                        icon.style.fontSize = '0.9rem';
+                        // Additional checks for common issues
+                        const hasAtSymbol = value.includes('@');
+                        const hasDotAfterAt = value.includes('@') && value.split('@')[1].includes('.');
+                        const isTooShort = value.length < 2;
+                        const hasSpaces = /\s/.test(value);
+                        const hasInvalidChars = /[^A-Za-z0-9@._#\-]/.test(value); // Only allow valid chars
 
-                        if (status === 'valid') {
-                            icon.innerHTML = '<i class="fas fa-check" style="color: #22c55e;"></i>';
-                        } else if (status === 'invalid') {
-                            icon.innerHTML = '<i class="fas fa-times" style="color: #ef4444;"></i>';
+                        let isValid = false;
+
+                        // Check Discord format (username or username#1234)
+                        if (discordRegex.test(value)) {
+                            isValid = true;
+                        }
+                        // Check Twitter format (@username or username)
+                        else if (twitterRegex.test(value) && !hasAtSymbol) {
+                            isValid = true;
+                        }
+                        // Check Twitter with @ symbol
+                        else if (value.startsWith('@') && twitterRegex.test(value.substring(1))) {
+                            isValid = true;
+                        }
+                        // Check email format
+                        else if (emailRegex.test(value)) {
+                            isValid = true;
+                        }
+                        // Check if it's email-like but might have issues
+                        else if (hasAtSymbol && !isTooShort && !hasSpaces) {
+                            // If it looks like email but fails regex, still allow it
+                            // Many email providers have non-standard domains
+                            isValid = true;
                         }
 
-                        field.parentElement.style.position = 'relative';
+                        // Additional validation checks
+                        if (hasSpaces) {
+                            isValid = false; // No spaces allowed in any format
+                        }
 
+                        if (hasInvalidChars) {
+                            isValid = false; // Invalid characters
+                        }
+
+                        if (isTooShort) {
+                            isValid = false; // Too short
+                        }
+
+                        if (!isValid) {
+                            field.style.borderColor = '#ef4444'; // Red only when wrong
+                            if (errorElement) {
+                                let errorMessage = 'Please enter a valid contact method. ';
+
+                                if (hasSpaces) {
+                                    errorMessage += 'No spaces allowed. ';
+                                }
+                                if (hasInvalidChars) {
+                                    errorMessage += 'Contains invalid characters. ';
+                                }
+                                if (isTooShort) {
+                                    errorMessage += 'Too short. ';
+                                }
+
+                                errorMessage += 'Accepted: email (user@example.com), Discord (username or username#1234), Twitter (@username)';
+                                errorElement.textContent = errorMessage;
+                                errorElement.style.display = 'block';
+                            }
+                        } else {
+                            // Only show normal border when valid - NO GREEN
+                            field.style.borderColor = '';
+                            if (errorElement) errorElement.style.display = 'none';
+                        }
+
+                        return isValid;
                     }
                 }
                 // ==================== END REAL-TIME VALIDATION ====================
 
-                // Form validation and submission - SIMPLE VERSION
+                // Form validation and submission - FIXED VERSION
                 contactForm.addEventListener('submit', function (e) {
                     // ALWAYS prevent default to run validation first
                     e.preventDefault();
@@ -773,42 +797,27 @@
                     });
                     this.querySelectorAll('input, select, textarea').forEach(field => {
                         field.style.borderColor = '';
-                        // Remove validation icons on submit
-                        const validationIcon = field.parentElement.querySelector('.validation-icon');
-                        if (validationIcon) {
-                            validationIcon.remove();
-                        }
                     });
 
-                    // Validate required fields
+                    // Validate required fields - INCLUDING CONTACT FIELD FOR "PLEASE FILL IN THIS FIELD"
                     requiredFields.forEach(field => {
                         if (!field.value.trim()) {
                             isValid = false;
                             field.style.borderColor = '#ef4444';
                             const errorElement = field.parentElement.querySelector('.error');
                             if (errorElement) {
-                                errorElement.textContent = 'This field is required';
+                                errorElement.textContent = 'Please fill in this field';
                                 errorElement.style.display = 'block';
                             }
                         }
                     });
 
-                    // Also validate contact field format (one more check)
+                    // Validate contact field with stricter rules on submit
                     const contactField = document.getElementById('contact');
                     if (contactField && contactField.value.trim()) {
-                        const value = contactField.value.trim();
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        const discordRegex = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
-                        const twitterRegex = /^@?\w{1,15}$/;
-
-                        if (!emailRegex.test(value) && !discordRegex.test(value) && !twitterRegex.test(value) && !value.includes('@')) {
+                        const isContactValid = validateContactField(contactField, true); // true = on submit
+                        if (!isContactValid) {
                             isValid = false;
-                            contactField.style.borderColor = '#ef4444';
-                            const errorElement = contactField.parentElement.querySelector('.error');
-                            if (errorElement) {
-                                errorElement.textContent = 'Please enter valid email, Discord (username#0000), or Twitter handle';
-                                errorElement.style.display = 'block';
-                            }
                         }
                     }
 
@@ -821,12 +830,13 @@
                                 field.style.animation = '';
                             }, 500);
                         });
+
+                        // FIX: Don't show alert, just return
                         return; // Stop here if invalid
                     }
 
-                    // If form is valid, show loading state
+                    // If form is valid, show loading state and submit
                     const submitBtn = this.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
 
@@ -836,22 +846,32 @@
                     tempForm.method = this.method;
                     tempForm.style.display = 'none';
 
-                    // Copy all form data
-                    const formData = new FormData(this);
-                    for (let [name, value] of formData.entries()) {
-                        const input = document.createElement('input');
-                        input.type = 'hidden';
-                        input.name = name;
-                        input.value = value;
-                        tempForm.appendChild(input);
+                    // Copy all form data including hidden fields
+                    const formElements = this.elements;
+                    for (let element of formElements) {
+                        if (element.name && !element.disabled) {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = element.name;
+
+                            if (element.type === 'checkbox' || element.type === 'radio') {
+                                input.value = element.checked ? element.value : '';
+                            } else {
+                                input.value = element.value;
+                            }
+
+                            tempForm.appendChild(input);
+                        }
                     }
 
                     // Add to page and submit
                     document.body.appendChild(tempForm);
                     tempForm.submit();
+
+                    // The form will now submit to FormSubmit.co
+                    // FormSubmit.co will redirect back to contact.html?success=true
                 });
 
-                // ... rest of your code (smooth scrolling, etc.)
                 // Smooth scrolling for anchor links
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                     anchor.addEventListener('click', function (e) {
@@ -880,6 +900,7 @@
 </body>
 
 </html>
+
 
 
 
