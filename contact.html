@@ -603,21 +603,21 @@
                 // Show success message automatically when page loads with ?success=true
                 const contactForm = document.getElementById('contact-form');
                 const formSubmitted = document.getElementById('form-submitted');
-    
+
                 if (contactForm && formSubmitted) {
                     contactForm.style.display = 'none';
                     formSubmitted.style.display = 'block';
                     formSubmitted.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    
+
                     // Remove the success parameter from URL without reloading
                     window.history.replaceState({}, document.title, window.location.pathname);
-    
+
                     // Hide success after 8 seconds and show form again
                     setTimeout(() => {
                         contactForm.reset();
                         formSubmitted.style.display = 'none';
                         contactForm.style.display = 'block';
-                    
+
                         // Reset submit button
                         const submitBtn = contactForm.querySelector('button[type="submit"]');
                         submitBtn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Send Message';
@@ -625,37 +625,37 @@
                     }, 8000);
                 }
             }
-            
+
             // Apply float-in animations
             const floatElements = document.querySelectorAll('.float-in');
             floatElements.forEach(el => {
                 el.style.animationPlayState = 'running';
             });
-    
+
             // Content reveal on scroll
             const revealElements = document.querySelectorAll('.content-reveal');
-    
+
             const revealOnScroll = function () {
                 revealElements.forEach(element => {
                     const elementTop = element.getBoundingClientRect().top;
                     const elementVisible = 150;
-    
+
                     if (elementTop < window.innerHeight - elementVisible) {
                         element.classList.add('visible');
                     }
                 });
             };
-    
+
             // Initial check
             revealOnScroll();
-    
+
             // Check on scroll
             window.addEventListener('scroll', revealOnScroll);
-    
+
             // Form handling
             const contactForm = document.getElementById('contact-form');
             const formSubmitted = document.getElementById('form-submitted');
-    
+
             if (contactForm) {
                 // Add input focus effects
                 const formInputs = contactForm.querySelectorAll('input, select, textarea');
@@ -663,29 +663,123 @@
                     input.addEventListener('focus', function () {
                         this.parentElement.style.transform = 'translateY(-2px)';
                     });
-    
+
                     input.addEventListener('blur', function () {
                         this.parentElement.style.transform = 'translateY(0)';
                     });
                 });
-    
+
+                // ==================== REAL-TIME VALIDATION ====================
+                const contactField = document.getElementById('contact');
+
+                if (contactField) {
+                    // Validate on input (as user types)
+                    contactField.addEventListener('input', function () {
+                        validateContactField(this);
+                    });
+
+                    // Validate on blur (when user leaves field)
+                    contactField.addEventListener('blur', function () {
+                        validateContactField(this);
+                    });
+
+                    // Validation function
+                    function validateContactField(field) {
+                        const value = field.value.trim();
+                        const errorElement = field.parentElement.querySelector('.error');
+
+                        // Clear error if field is empty (required validation will catch it on submit)
+                        if (!value) {
+                            field.style.borderColor = '';
+                            if (errorElement) {
+                                errorElement.style.display = 'none';
+                            }
+                            return;
+                        }
+
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        const discordRegex = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
+                        const twitterRegex = /^@?\w{1,15}$/;
+
+                        const isValid = emailRegex.test(value) ||
+                            discordRegex.test(value) ||
+                            twitterRegex.test(value) ||
+                            value.includes('@'); // Fallback for email-like
+
+                        if (isValid) {
+                            // Valid - show green check
+                            field.style.borderColor = '#22c55e'; // Green
+                            if (errorElement) {
+                                errorElement.style.display = 'none';
+                            }
+
+                            // Optional: Add a checkmark icon
+                            showValidationIcon(field, 'valid');
+                        } else {
+                            // Invalid - show red border and error
+                            field.style.borderColor = '#ef4444'; // Red
+                            if (errorElement) {
+                                errorElement.textContent = 'Please enter valid email, Discord (username#0000), or Twitter handle';
+                                errorElement.style.display = 'block';
+                            }
+
+                            // Optional: Add an X icon
+                            showValidationIcon(field, 'invalid');
+                        }
+                    }
+
+                    // Optional: Function to show validation icons
+                    function showValidationIcon(field, status) {
+                        // Remove existing icon
+                        const existingIcon = field.parentElement.querySelector('.validation-icon');
+                        if (existingIcon) {
+                            existingIcon.remove();
+                        }
+
+                        if (!field.value.trim()) return; // Don't show icon if empty
+
+                        const icon = document.createElement('span');
+                        icon.className = 'validation-icon';
+                        icon.style.position = 'absolute';
+                        icon.style.right = '15px';
+                        icon.style.top = '50%';
+                        icon.style.transform = 'translateY(-50%)';
+                        icon.style.fontSize = '0.9rem';
+
+                        if (status === 'valid') {
+                            icon.innerHTML = '<i class="fas fa-check" style="color: #22c55e;"></i>';
+                        } else if (status === 'invalid') {
+                            icon.innerHTML = '<i class="fas fa-times" style="color: #ef4444;"></i>';
+                        }
+
+                        field.parentElement.style.position = 'relative';
+
+                    }
+                }
+                // ==================== END REAL-TIME VALIDATION ====================
+
                 // Form validation and submission - SIMPLE VERSION
                 contactForm.addEventListener('submit', function (e) {
                     // ALWAYS prevent default to run validation first
                     e.preventDefault();
-                    
+
                     // Run validation
                     let isValid = true;
                     const requiredFields = this.querySelectorAll('[required]');
-    
+
                     // Clear previous errors
                     this.querySelectorAll('.error').forEach(error => {
                         error.style.display = 'none';
                     });
                     this.querySelectorAll('input, select, textarea').forEach(field => {
                         field.style.borderColor = '';
+                        // Remove validation icons on submit
+                        const validationIcon = field.parentElement.querySelector('.validation-icon');
+                        if (validationIcon) {
+                            validationIcon.remove();
+                        }
                     });
-    
+
                     // Validate required fields
                     requiredFields.forEach(field => {
                         if (!field.value.trim()) {
@@ -698,15 +792,15 @@
                             }
                         }
                     });
-    
-                    // Also validate contact field format
+
+                    // Also validate contact field format (one more check)
                     const contactField = document.getElementById('contact');
                     if (contactField && contactField.value.trim()) {
                         const value = contactField.value.trim();
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                         const discordRegex = /^[\w]([\w\.]{2,31})?(#\d{4})?$/;
                         const twitterRegex = /^@?\w{1,15}$/;
-                        
+
                         if (!emailRegex.test(value) && !discordRegex.test(value) && !twitterRegex.test(value) && !value.includes('@')) {
                             isValid = false;
                             contactField.style.borderColor = '#ef4444';
@@ -717,7 +811,7 @@
                             }
                         }
                     }
-    
+
                     if (!isValid) {
                         // Show shake animation on invalid fields
                         const invalidFields = this.querySelectorAll('[style*="border-color: #ef4444"]');
@@ -729,24 +823,19 @@
                         });
                         return; // Stop here if invalid
                     }
-    
+
                     // If form is valid, show loading state
                     const submitBtn = this.querySelector('button[type="submit"]');
                     const originalText = submitBtn.innerHTML;
                     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                     submitBtn.disabled = true;
-    
-                    // REMOVED: Don't show success message here!
-                    // REMOVED: contactForm.style.display = 'none';
-                    // REMOVED: formSubmitted.style.display = 'block';
-                    
-                    // IMPORTANT: Create a new form element without event listeners
-                    // This ensures the form submits properly
+
+                    // Create a new form element without event listeners
                     const tempForm = document.createElement('form');
                     tempForm.action = this.action;
                     tempForm.method = this.method;
                     tempForm.style.display = 'none';
-                    
+
                     // Copy all form data
                     const formData = new FormData(this);
                     for (let [name, value] of formData.entries()) {
@@ -756,22 +845,19 @@
                         input.value = value;
                         tempForm.appendChild(input);
                     }
-                    
+
                     // Add to page and submit
                     document.body.appendChild(tempForm);
                     tempForm.submit();
-                    
-                    // The page will now redirect to FormSubmit.co
-                    // FormSubmit.co will process and redirect back to contact.html?success=true
-                    // The success message will show from the URL parameter handler (lines 9-31)
                 });
-                
+
+                // ... rest of your code (smooth scrolling, etc.)
                 // Smooth scrolling for anchor links
                 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                     anchor.addEventListener('click', function (e) {
                         const targetId = this.getAttribute('href');
                         if (targetId === '#') return;
-    
+
                         const targetElement = document.querySelector(targetId);
                         if (targetElement) {
                             e.preventDefault();
@@ -782,7 +868,7 @@
                         }
                     });
                 });
-    
+
                 // Add floating animation
                 const floatingElements = document.querySelectorAll('.floating');
                 floatingElements.forEach((el, index) => {
@@ -794,5 +880,6 @@
 </body>
 
 </html>
+
 
 
