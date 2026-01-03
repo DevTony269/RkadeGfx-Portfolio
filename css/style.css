@@ -491,11 +491,6 @@ section {
     gap: 48px;
 }
 
-#contact-form button {
-    display: block;
-    margin: 0 auto;
-}
-
 .contact-form {
     background: var(--dark-light);
     border: 1px solid rgba(139, 92, 246, 0.2);
@@ -711,6 +706,11 @@ section {
 
     .contact-grid {
         grid-template-columns: 1fr;
+    }
+
+    #contact-form button {
+        display: block;
+        margin: 0 auto;
     }
 
     .hero-buttons {
@@ -1127,3 +1127,86 @@ img {
     }
 }
 
+
+
+
+
+
+
+
+#FAQ section
+
+/* FAQ Section Styling */
+.faq-container {
+    max-width: 800px;
+    margin: 50px auto 0;
+}
+
+.faq-item {
+    background: var(--dark-light);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 22px 25px;
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.faq-question:hover {
+    background-color: rgba(139, 92, 246, 0.05);
+}
+
+.faq-question i {
+    color: var(--primary);
+    font-size: 1rem;
+    transition: transform 0.4s ease;
+}
+
+/* Style for the icon when the answer is open (via JS) */
+.faq-item.active .faq-question i {
+    transform: rotate(45deg);
+    /* Turns plus (+) into an (X) */
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 25px;
+    color: var(--gray);
+    line-height: 1.7;
+    transition: max-height 0.5s ease, padding 0.3s ease;
+}
+
+/* When the FAQ item has the 'active' class, show the answer */
+.faq-item.active .faq-answer {
+    max-height: 500px;
+    /* Adjust based on your longest answer */
+    padding: 0 25px 25px 25px;
+}
+
+.faq-answer ul {
+    margin: 15px 0 15px 20px;
+}
+
+.faq-answer li {
+    margin-bottom: 8px;
+}
