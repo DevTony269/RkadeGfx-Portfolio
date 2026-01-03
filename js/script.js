@@ -214,3 +214,25 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+// FAQ Accordion Functionality
+document.addEventListener('DOMContentLoaded', function () {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', function () {
+            // Toggle the 'active' class on the parent .faq-item
+            const faqItem = this.parentElement;
+            faqItem.classList.toggle('active');
+
+            // Close other open FAQs (optional - for single open at a time)
+            // faqQuestions.forEach(otherQuestion => {
+            //     const otherItem = otherQuestion.parentElement;
+            //     if (otherItem !== faqItem && otherItem.classList.contains('active')) {
+            //         otherItem.classList.remove('active');
+            //     }
+            // });
+        });
+    });
+});
