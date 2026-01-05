@@ -1222,6 +1222,7 @@ img {
     /* Maintains aspect ratio */
     display: block;
     transition: opacity 0.3s ease;
+    margin-top: 8px;
 }
 
 .logo-img:hover {
@@ -1250,6 +1251,6 @@ img {
     width: 100%;
 }
 
-#add R if looks good
+
 
 
