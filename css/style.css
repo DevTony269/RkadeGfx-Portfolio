@@ -1254,4 +1254,45 @@ img {
 
 
 
+/* Testimony styling with pfp icon */
+/* Testimonial Avatar Styles */
+.testimonial-author {
+    border-top: 1px solid rgba(139, 92, 246, 0.2);
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.testimonial-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+.testimonial-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.testimonial-name {
+    font-weight: 600;
+    margin: 0;
+    color: var(--light);
+}
+
+.testimonial-role {
+    color: var(--primary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+
+
+
 
