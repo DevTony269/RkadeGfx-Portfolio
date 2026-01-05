@@ -219,7 +219,7 @@
         .important-note {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.02));
             border: 1px solid rgba(239, 68, 68, 0.2);
-            border-left: 4px solid #ef4444;
+            border-left: 4px solid none;
             border-radius: 12px;
             padding: 25px;
             margin: 30px 0;
@@ -238,7 +238,7 @@
         .contact-box {
             background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(21, 128, 61, 0.02));
             border: 1px solid rgba(34, 197, 94, 0.2);
-            border-left: 4px solid #22c55e;
+            border-left: 4px solid none;
             border-radius: 12px;
             padding: 25px;
             margin: 30px 0;
@@ -415,6 +415,205 @@
         html {
             scroll-behavior: smooth;
         }
+
+        /* Formal Document Sections/Chapters Styling */
+        .terms-section {
+            margin-bottom: 45px;
+            position: relative;
+            padding: 35px;
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(139, 92, 246, 0.15);
+        }
+
+        .terms-section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Remove the old dot indicator */
+        .terms-section::before {
+            display: none;
+        }
+
+        /* Section Header - Clean and professional */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+        }
+
+        /* Professional section number badge */
+        .section-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--terms-primary), var(--terms-secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Section title - Clean typography */
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--terms-light);
+            font-weight: 600;
+            margin: 0;
+            flex: 1;
+        }
+
+        /* Section content with clear hierarchy */
+        .section-content {
+            color: var(--terms-gray);
+            line-height: 1.8;
+            margin-left: 0;
+            font-size: 1.05rem;
+        }
+
+        .section-content p {
+            margin-bottom: 15px;
+        }
+
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Clean list styling */
+        .terms-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .terms-list li {
+            margin-bottom: 12px;
+            padding-left: 30px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        /* Simple bullet point */
+        .terms-list li::before {
+            content: '•';
+            position: absolute;
+            left: 10px;
+            color: var(--terms-primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* Highlight list - Clean emphasis box */
+        .highlight-list {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-left: 3px solid var(--terms-primary);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .highlight-list p {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.08);
+        }
+
+        .highlight-list p:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .highlight-list strong {
+            color: var(--terms-light);
+            font-weight: 600;
+        }
+
+        /* Delivery timeline - Professional table-like cards */
+        .delivery-timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .delivery-tier {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .tier-name {
+            color: var(--terms-primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .tier-time {
+            color: var(--terms-light);
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .tier-price {
+            color: var(--terms-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .terms-section {
+                padding: 25px;
+            }
+
+            .section-header {
+                flex-direction: row;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .section-number {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .section-content {
+                margin-left: 0;
+            }
+
+            .terms-list li {
+                padding-left: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .terms-section {
+                padding: 20px;
+            }
+
+            .section-number {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                border-radius: 6px;
+            }
+
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 
@@ -444,7 +643,7 @@
             <!-- Header -->
             <div class="terms-header fade-in">
                 <h1>Terms of Service</h1>
-                <p class="subtitle">Last Updated: January 2nd, 2026</p>
+                <p class="subtitle">Last Updated: <span id="last-updated"></span></p>
                 <p class="subtitle">By commissioning me, you agree to abide by these Terms of Service.</p>
             </div>
 
@@ -474,16 +673,21 @@
                         <h2 class="section-title">Payment Terms</h2>
                     </div>
                     <div class="section-content">
-                        <div class="highlight-list">
-                            <p><strong>No refunds</strong> once payment has been processed</p>
-                            <p><strong>Prices can be changed</strong> - base rate prices displayed may be changed
-                                according to the difficulty of the task</p>
-                            <p><strong>Additional fees apply</strong> for rush orders (30% surcharge for delivery within
-                                48 hours)</p>
-                            <p><strong>Cancellation</strong> during a project will result in a 50% fee as compensation
-                            </p>
-                        </div>
                         <ul class="terms-list">
+                            <li>
+                                <p>No refunds once payment has been processed</p>
+                            </li>
+                            <li>Prices can be changed - base rate prices displayed may be changed
+                                according to the difficulty of the task</p>
+                            </li>
+                            <li>
+                                <p>Additional fees apply for rush orders (30% surcharge for delivery within
+                                    48 hours)</p>
+                            </li>
+                            <li>
+                                <p>Cancellation during a project will result in a 50% fee as compensation
+                                </p>
+                            </li>
                             <li>Payment methods accepted: PayPal, Robux (agreed conversion rate), or other pre-approved
                                 methods</li>
                             <li>All payments in currency must be made in USD unless otherwise agreed</li>
@@ -499,7 +703,7 @@
                     </div>
                     <div class="section-content">
                         <p>Client must provide specific deadlines during the initial consultation, but the time required
-                            are general as shown:</p>
+                            are generally as shown:</p>
 
                         <div class="delivery-timeline">
                             <div class="delivery-tier">
@@ -516,7 +720,7 @@
                             </div>
                         </div>
 
-                        <p><strong>I am not responsible for delays caused by:</strong></p>
+                        <p>I am not responsible for delays caused by:</p>
                         <ul class="terms-list">
                             <li>Client's delayed responses or feedback</li>
                             <li>Technical issues beyond my control</li>
@@ -532,11 +736,11 @@
                         <h2 class="section-title">Revision Policy</h2>
                     </div>
                     <div class="section-content">
-                        <p><strong>Revisions are limited per package:</strong></p>
+                        <p>Revisions are limited per package:</p>
                         <ul class="terms-list">
-                            <li><strong>Logos:</strong> 3 revisions included</li>
-                            <li><strong>GFX/Profile Pictures:</strong> 5 revisions included</li>
-                            <li><strong>Thumbnails:</strong> Unlimited revisions</li>
+                            <li>Logos: 3 revisions included</li>
+                            <li>GFX/Profile Pictures: 5 revisions included</li>
+                            <li>Thumbnails: Unlimited revisions</li>
                         </ul>
                         <p>Major changes to concept after work has begun may require additional payment</p>
                         <p>Revisions must be requested within 2 days of receiving preview</p>
@@ -550,7 +754,7 @@
                         <h2 class="section-title">Client Responsibilities</h2>
                     </div>
                     <div class="section-content">
-                        <p><strong>Client must provide:</strong></p>
+                        <p>Client must provide:</p>
                         <ul class="terms-list">
                             <li>Clear reference images and descriptions</li>
                             <li>Specific color schemes and style preferences</li>
@@ -568,16 +772,20 @@
                         <h2 class="section-title">Rights & Usage</h2>
                     </div>
                     <div class="section-content">
+                        <p>Clients may not:</p>
                         <ul class="terms-list">
-                            <li>I may display completed work on my portfolio, social media, or other promotional
-                                materials</li>
-                            <li>Clients may not:
-                                <ul class="terms-list" style="margin-left: 20px; margin-top: 10px;">
-                                    <li>Resell or redistribute the artwork for profit</li>
-                                    <li>Use artwork for illegal or harmful purposes</li>
-                                </ul>
+                            <li>Resell or redistribute the artwork for profit</li>
+                            <li>Use artwork for illegal or harmful purposes</li>
+                        </ul>
+
+                        <p>I may:</p>
+                        <ul class="terms-list">
+                            <li>Display completed work on my portfolio, social media, or other promotional
+                                materials
                             </li>
                         </ul>
+
+
                     </div>
                 </div>
 
@@ -601,21 +809,6 @@
                 <div class="terms-section">
                     <div class="section-header">
                         <div class="section-number">8</div>
-                        <h2 class="section-title">Pricing Structure</h2>
-                    </div>
-                    <div class="section-content">
-                        <ul class="terms-list">
-                            <li>Prices listed on website are base rates to be combined with one of the 3 packages
-                                (Basic/Standard/Premium)</li>
-                            <li>Prices increase with: Additional revisions or elements</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Section 9 -->
-                <div class="terms-section">
-                    <div class="section-header">
-                        <div class="section-number">9</div>
                         <h2 class="section-title">Changes to Terms</h2>
                     </div>
                     <div class="section-content">
@@ -631,8 +824,8 @@
                     <div class="note-title">
                         <i class="fas fa-exclamation-circle"></i> Important Acknowledgement
                     </div>
-                    <p><strong>By submitting a commission request, the client acknowledges they have read, understood,
-                            and agreed to all terms above.</strong></p>
+                    <p>By submitting a commission request, the client acknowledges they have read, understood,
+                        and agreed to all terms above</p>
                 </div>
 
                 <!-- Contact Box -->
@@ -769,11 +962,20 @@
                 this.innerHTML = '<i class="fas fa-check-circle"></i> I Agree to Terms';
             }, 1500);
         });
+
+        // Auto-update the last modified date
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the last modified date of the document
+            const lastModified = new Date(document.lastModified);
+
+            // Format the date as "Month Day, Year"
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = lastModified.toLocaleDateString('en-US', options);
+
+            // Update the span with the formatted date
+            document.getElementById('last-updated').textContent = formattedDate;
+        });
     </script>
 </body>
 
 </html>
-
-
-
-
