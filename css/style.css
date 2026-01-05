@@ -1222,7 +1222,7 @@ img {
     /* Maintains aspect ratio */
     display: block;
     transition: opacity 0.3s ease;
-    margin-top: 8px;
+    margin-top: 5px;
 }
 
 .logo-img:hover {
@@ -1250,6 +1250,7 @@ img {
 .logo:hover::after {
     width: 100%;
 }
+
 
 
 
