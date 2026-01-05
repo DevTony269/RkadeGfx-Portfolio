@@ -1272,6 +1272,7 @@ img {
     border: 2px solid var(--primary);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: white;
+    /*White background = can see guest pfp */
 }
 
 .testimonial-info {
@@ -1291,6 +1292,7 @@ img {
     font-size: 0.9rem;
     margin: 0;
 }
+
 
 
 
