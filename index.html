@@ -177,6 +177,243 @@
                 font-size: 1.2rem;
             }
         }
+        /* Hero Container */
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 300px;
+            max-width: 600px;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image img:hover {
+            transform: translateY(-5px);
+        }
+
+
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 30px;
+            }
+
+            .hero-content {
+                order: 1;
+            }
+
+            .hero-image {
+                order: 2;
+                max-width: 400px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .footer-social {
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .social-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-social {
+                gap: 12px;
+                margin-bottom: 18px;
+            }
+
+            .social-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+        /* Hero Section Styling */
+        .hero-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+            width: 100%;
+        }
+
+        .hero-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero-content h1 span{
+            font-size: 3.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .hero-buttons .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+        }
+
+        /* Hero Image */
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-image img:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Responsive Design */
+
+        @media (max-width: 1070px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+            .hero-content h1 span{
+                font-size: 3rem;
+            }
+            .hero-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 40px;
+            }
+            
+            .hero-content {
+                text-align: center;
+            }
+            
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-image {
+                order: 2;
+            }
+            
+            .hero-content {
+                order: 1;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .hero-content h1 span{
+                font-size: 2.5rem;
+            }
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                max-width: 280px;
+                font-size: 1rem;
+            }
+            
+            .hero-image img {
+                max-width: 350px;
+            }
+        }
     </style>
 </head>
 
@@ -202,19 +439,21 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+   <!-- Hero Section -->
     <section class="hero">
-        <div class="container">
-            <h1>Hey there! I am <span>RkadeGfx</span>, a Professional <span>Roblox GFX</span> Artist.</h1>
-            <p style="margin-bottom: 45px">Creating thumbnails, logos, and gfx that fit your project needs</p>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>Hey there! I'm <span>RkadeGfx</span>,<br> a Professional <span>GFX Artist.</span></h1>
+                <p style="margin-bottom: 30px">Creating thumbnails, logos, and gfx that fit your project needs</p>
 
-            <div class="hero-buttons">
-                <a href="contact.html" class="btn btn-secondary">
-                    Contact Me
-                </a>
-
-                <a href="commissions.html" class="btn">View All Commission Types</a>
-
+                <div class="hero-buttons">
+                    <a href="contact.html" class="btn btn-secondary">Contact Me</a>
+                    <a href="commissions.html" class="btn">View All Commission Types</a>
+                </div>
+            </div>
+            
+            <div class="hero-image">
+                <img src="images/RkadeGfx.png" alt="RkadeGfx Portfolio - Professional Roblox GFX Artist">
             </div>
         </div>
     </section>
@@ -354,6 +593,7 @@
 </body>
 
 </html>
+
 
 
 
