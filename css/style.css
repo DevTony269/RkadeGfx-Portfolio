@@ -178,8 +178,8 @@ section {
 
 /* Hero Section */
 .hero {
-    padding-top: 160px;
-    padding-bottom: 100px;
+    padding-top: 80px;
+    padding-bottom: 80px;
     text-align: center;
 }
 
@@ -1292,6 +1292,7 @@ img {
     font-size: 0.9rem;
     margin: 0;
 }
+
 
 
 
